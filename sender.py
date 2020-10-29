@@ -33,10 +33,10 @@ DEBUGMODE = 1
 MAX_PAYLOAD_LENGTH = 121
 
 def send_cmd(serchan, thecmd):
-    serchan.write(thecmd+'\r\n')
-    returned_msg = str(serchan.readline())
+    serchan.write(thecmd+b'\r\n')
+    returned_msg = (serchan.readline())
     if (DEBUGMODE==1):
-        print('sent cmd: '+thecmd+" -> got: "+returned_msg)
+        print(b"sent cmd: "+thecmd+b" -> got: "+returned_msg)
 
 #
 # start here

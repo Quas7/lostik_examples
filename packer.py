@@ -1,4 +1,4 @@
-#!/usr/bin/python
+3 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 #+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #|R|a|s|p|b|e|r|r|y|P|i|.|c|o|m|.|t|w|
@@ -15,6 +15,10 @@
 # Date   : 10/03/2017
 #
 
+import codecs
+
+decode_hex = codecs.getdecoder("hex_codec")
+
 SOH  = "01"    # 0x01
 ACK  = "06"    # 0x06
 CRLF = "\r\n"  # 0x32 0x41 0x33 0x31
@@ -26,7 +30,7 @@ CRLF = "\r\n"  # 0x32 0x41 0x33 0x31
 #          2 bytes  6 bytes    length * 2 bytes   4 bytes
 #
 def Pack_Str(string):
-    data   = string.encode("hex")
+    data   = string.encode("utf-8").hex()
     length = len(data)
 
     if length < 10:
@@ -36,8 +40,9 @@ def Pack_Str(string):
     else:
         length = str(length)
 
-    payload = SOH + length.encode("hex") + data + CRLF
-#    print("RAW: " + payload)
+    length = length.encode("utf-8").hex()
+    payload = SOH + str(length) + data + CRLF
+    #print("RAW: " + payload)
 
     return [length, payload]
 
@@ -47,8 +52,8 @@ def Pack_Str(string):
 #
 def Unpack_Str(string):
     soh    = string[0:1]
-    length = int((string[2:8]).decode("hex")) /2
-    data   = (string[8:-2]).decode("hex")
+    length = decode_hex(string[2:8]) /2
+    data   = decode_hex(string[8:-2])[0]
 
     return [length, data]
 
